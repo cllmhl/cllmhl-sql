@@ -1,4 +1,4 @@
-package it.fe.cllmhl.sql;
+package it.fe.cllmhl.sql.service;
 
 import java.sql.Connection;
 

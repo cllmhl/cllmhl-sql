@@ -1,12 +1,17 @@
 package it.fe.cllmhl.sql;
 
+import it.fe.cllmhl.sql.orm.Column;
+import it.fe.cllmhl.sql.orm.IRowDecoder;
+import it.fe.cllmhl.sql.orm.ReflectionRowDecoder;
+import it.fe.cllmhl.sql.orm.SqlType;
+
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 
 public class TestTable {
 	private static String name = "test";
-    private static List<Column> columns = new ArrayList<Column>();
+    private static List<Column<? extends Object>> columns = new ArrayList<Column<? extends Object>>();
     
     public static Column chiave = new Column("chiave",SqlType.INTEGER,true);
     public static Column stringa = new Column("stringa",SqlType.VARCHAR,false);
@@ -27,7 +32,7 @@ public class TestTable {
     	return name;
 	}
 
-	public static List<Column> getColumns() {
+	public static List<Column<? extends Object>> getColumns() {
 		return columns;
 	}
 

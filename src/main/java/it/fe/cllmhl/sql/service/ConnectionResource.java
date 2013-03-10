@@ -1,8 +1,12 @@
-package it.fe.cllmhl.sql;
+package it.fe.cllmhl.sql.service;
 
 import it.fe.cllmhl.core.ILogger;
 import it.fe.cllmhl.core.ServiceLocator;
 import it.fe.cllmhl.core.UncheckedException;
+import it.fe.cllmhl.sql.SqlErrors;
+import it.fe.cllmhl.sql.orm.IResultSetDecoder;
+import it.fe.cllmhl.sql.orm.SqlParameter;
+import it.fe.cllmhl.sql.orm.SqlStatement;
 import it.fe.cllmhl.sql.transaction.IResTransactionService;
 import it.fe.cllmhl.sql.transaction.IResource;
 import it.fe.cllmhl.sql.transaction.ITransaction;
@@ -210,11 +214,11 @@ class ConnectionResource implements IResource {
         return lBeanList;
     }
 
-    private void setParameters(PreparedStatement pPreparedStatement, List<SqlParameter> pSQLParameterList) {
+    private void setParameters(PreparedStatement pPreparedStatement, List<SqlParameter<? extends Object>> pSQLParameterList) {
         int lIntPosition = 1;
-        for (SqlParameter lSqlParameter : pSQLParameterList) {
-            mLogger.debug("Setting parameter ", lSqlParameter.getColumn(), " to ", lSqlParameter.getValue());
-            lSqlParameter.getColumn().setParameter(pPreparedStatement, lIntPosition, lSqlParameter.getValue());
+        for (SqlParameter<? extends Object> lSqlParameter : pSQLParameterList) {
+            mLogger.debug("Setting parameter ", lIntPosition, " to ", lSqlParameter.getValue());
+            lSqlParameter.setParameter(pPreparedStatement, lIntPosition);
             lIntPosition++;
         }
     }

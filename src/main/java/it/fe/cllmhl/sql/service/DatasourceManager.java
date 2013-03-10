@@ -1,9 +1,10 @@
-package it.fe.cllmhl.sql;
+package it.fe.cllmhl.sql.service;
 
 import it.fe.cllmhl.Installation;
 import it.fe.cllmhl.core.ILogger;
 import it.fe.cllmhl.core.ServiceLocator;
 import it.fe.cllmhl.core.UncheckedException;
+import it.fe.cllmhl.sql.SqlErrors;
 import it.fe.cllmhl.util.StringUtil;
 import it.fe.cllmhl.util.XMLUtil;
 

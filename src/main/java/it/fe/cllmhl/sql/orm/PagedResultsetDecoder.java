@@ -1,4 +1,6 @@
-package it.fe.cllmhl.sql;
+package it.fe.cllmhl.sql.orm;
+
+import it.fe.cllmhl.sql.IPager;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;

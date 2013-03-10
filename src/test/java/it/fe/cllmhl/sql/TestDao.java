@@ -3,6 +3,10 @@ package it.fe.cllmhl.sql;
 import it.fe.cllmhl.core.ILogger;
 import it.fe.cllmhl.core.ServiceLocator;
 import it.fe.cllmhl.sql.TestTable.TestRowDecoder;
+import it.fe.cllmhl.sql.orm.PagedResultsetDecoder;
+import it.fe.cllmhl.sql.orm.SqlParameter;
+import it.fe.cllmhl.sql.orm.SqlStatement;
+import it.fe.cllmhl.sql.service.SqlService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,7 +30,7 @@ final class TestDao {
     protected static TestBean insert(TestBean pTestBean) {
         mLogger.debug("Start insert");
 
-        List<SqlParameter> lSqlParameterList = new ArrayList<SqlParameter>();
+        List<SqlParameter<? extends Object>> lSqlParameterList = new ArrayList<SqlParameter<? extends Object>>();
 
         // chiave
         if (pTestBean.getChiave() != null)
@@ -52,7 +56,7 @@ final class TestDao {
     protected static void updateByPrimaryKey(TestBean pTestBean) {
         mLogger.debug("Start updateByPrimaryKey");
 
-        List<SqlParameter> lSqlParameterList = new ArrayList<SqlParameter>();
+        List<SqlParameter<? extends Object>> lSqlParameterList = new ArrayList<SqlParameter<? extends Object>>();
 
         // chiave
         lSqlParameterList.add(new SqlParameter(TestTable.chiave, pTestBean.getChiave()));
@@ -74,7 +78,7 @@ final class TestDao {
     protected static void deleteByPrimaryKey(TestBean pTestBean) {
         mLogger.debug("Start DeleteByPrimaryKey");
 
-        List<SqlParameter> lSqlParameterList = new ArrayList<SqlParameter>();
+        List<SqlParameter<? extends Object>> lSqlParameterList = new ArrayList<SqlParameter<? extends Object>>();
 
         // chiave
         lSqlParameterList.add(new SqlParameter(TestTable.chiave, pTestBean.getChiave()));
@@ -114,7 +118,7 @@ final class TestDao {
     protected static TestBean loadByPrimaryKey(TestBean pTestBean) {
         mLogger.debug("Start loadByPrimaryKey");
 
-        List<SqlParameter> lSqlParameterList = new ArrayList<SqlParameter>();
+        List<SqlParameter<? extends Object>> lSqlParameterList = new ArrayList<SqlParameter<? extends Object>>();
 
         // chiave
         lSqlParameterList.add(new SqlParameter(TestTable.chiave, pTestBean.getChiave()));

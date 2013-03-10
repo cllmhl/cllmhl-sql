@@ -1,25 +1,25 @@
-package it.fe.cllmhl.sql;
+package it.fe.cllmhl.sql.orm;
 
 import java.util.ArrayList;
 import java.util.List;
 
-class SqlStatement {
+public class SqlStatement {
     private StringBuffer sql;
-    private List<SqlParameter> parameters;
+    private List<SqlParameter<? extends Object>> parameters;
 
-    public SqlStatement(StringBuffer sql, List<SqlParameter> parameters) {
+    public SqlStatement(StringBuffer sql, List<SqlParameter<? extends Object>> parameters) {
 		this.sql = sql;
 		this.parameters = parameters;
 	}
 
 	public SqlStatement(String sql) {
 		this.sql = new StringBuffer(sql);
-		this.parameters = new ArrayList<SqlParameter>();
+		this.parameters = new ArrayList<SqlParameter<? extends Object>>();
 	}
 
 	public SqlStatement() {
 		this.sql  = new StringBuffer();
-		this.parameters = new ArrayList<SqlParameter>();
+		this.parameters = new ArrayList<SqlParameter<? extends Object>>();
 	}
 
 	public String getSql() {
@@ -30,11 +30,11 @@ class SqlStatement {
         this.sql = new StringBuffer(sql);
     }
 
-    public List<SqlParameter> getParameters() {
+    public List<SqlParameter<? extends Object>> getParameters() {
         return parameters;
     }
 
-    public void setParameters(List<SqlParameter> parameters) {
+    public void setParameters(List<SqlParameter<? extends Object>> parameters) {
         this.parameters = parameters;
     }
     
@@ -42,7 +42,7 @@ class SqlStatement {
         this.sql.append(sql);
 	}
 	
-    public void append(String sql, SqlParameter parameter){
+    public void append(String sql, SqlParameter<? extends Object> parameter){
         this.parameters.add(parameter);
     };
     
@@ -53,7 +53,7 @@ class SqlStatement {
 
 	public String toString() {
 		StringBuffer lStringBuffer = new StringBuffer(getSql());
-		for(SqlParameter parameter : parameters){
+		for(SqlParameter<? extends Object> parameter : parameters){
 		    int firstPlaceholderIndex = lStringBuffer.indexOf("?");
 		    lStringBuffer.replace(firstPlaceholderIndex, firstPlaceholderIndex+1, String.valueOf(parameter.getValue()));
 		}

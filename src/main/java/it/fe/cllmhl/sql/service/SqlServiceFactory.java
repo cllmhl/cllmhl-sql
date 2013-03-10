@@ -1,11 +1,11 @@
-package it.fe.cllmhl.sql;
+package it.fe.cllmhl.sql.service;
 
 import it.fe.cllmhl.core.INamedServiceFactory;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public class ISqlServiceFactory implements INamedServiceFactory<ISqlService> {
+public class SqlServiceFactory implements INamedServiceFactory<ISqlService> {
 	
 	private static Map<String,ISqlService> mSqlServiceInstancesMap = new HashMap<String,ISqlService>();
 

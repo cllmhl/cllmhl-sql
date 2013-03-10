@@ -1,8 +1,15 @@
-package it.fe.cllmhl.sql;
+package it.fe.cllmhl.sql.service;
 
 import it.fe.cllmhl.core.ILogger;
 import it.fe.cllmhl.core.ServiceLocator;
 import it.fe.cllmhl.core.UncheckedException;
+import it.fe.cllmhl.sql.SqlErrors;
+import it.fe.cllmhl.sql.orm.IResultSetDecoder;
+import it.fe.cllmhl.sql.orm.IRowDecoder;
+import it.fe.cllmhl.sql.orm.ScalarResultsetDecoder;
+import it.fe.cllmhl.sql.orm.SingleRowResultsetDecoder;
+import it.fe.cllmhl.sql.orm.SqlParameter;
+import it.fe.cllmhl.sql.orm.SqlStatement;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -55,7 +62,7 @@ final class SqlService implements ISqlService {
     }
 
     @Override
-    public void deleteByPrimaryKey(String pStrTableName, List<SqlParameter> pSQLParameterList) {
+    public void deleteByPrimaryKey(String pStrTableName, List<SqlParameter<? extends Object>> pSQLParameterList) {
         mLogger.debug("Start deleteByPrimaryKey");
 
         StringBuffer lStringBufferSQL = new StringBuffer("DELETE FROM ");
@@ -63,7 +70,7 @@ final class SqlService implements ISqlService {
 
         // Where condition sulla primary key
         int numberOfColumns = 0;
-        for (SqlParameter lSQLParameter : pSQLParameterList) {
+        for (SqlParameter<? extends Object> lSQLParameter : pSQLParameterList) {
             numberOfColumns++;
             if (numberOfColumns == 1) {
                 lStringBufferSQL.append(" WHERE ");
@@ -89,7 +96,7 @@ final class SqlService implements ISqlService {
     }
 
     @Override
-    public void insert(String pStrTableName, List<SqlParameter> pSQLParameterList) {
+    public void insert(String pStrTableName, List<SqlParameter<? extends Object>> pSQLParameterList) {
         mLogger.debug("Start insert");
 
         StringBuffer lStringBufferSQL = new StringBuffer();
@@ -98,7 +105,7 @@ final class SqlService implements ISqlService {
         lStringBufferSQL.append("(");
         // Colums
         int numberOfColumns = 0;
-        for (SqlParameter lSQLParameter : pSQLParameterList) {
+        for (SqlParameter<? extends Object> lSQLParameter : pSQLParameterList) {
             numberOfColumns++;
             if (numberOfColumns != 1) {
                 lStringBufferSQL.append(",");
@@ -123,7 +130,7 @@ final class SqlService implements ISqlService {
     }
 
     @Override
-    public <T> T loadByPrimaryKey(String pStrTableName, List<SqlParameter> pSQLParameterList, IRowDecoder<T> pRowDecoder) {
+    public <T> T loadByPrimaryKey(String pStrTableName, List<SqlParameter<? extends Object>> pSQLParameterList, IRowDecoder<T> pRowDecoder) {
         mLogger.debug("Start loadByPrimaryKey");
 
         StringBuffer lStringBufferSQL = new StringBuffer("SELECT * FROM ");
@@ -131,7 +138,7 @@ final class SqlService implements ISqlService {
 
         // Where condition on PK
         int numberOfColumns = 0;
-        for (SqlParameter lSQLParameter : pSQLParameterList) {
+        for (SqlParameter<? extends Object> lSQLParameter : pSQLParameterList) {
             numberOfColumns++;
             if (numberOfColumns == 1) {
                 lStringBufferSQL.append(" WHERE ");
@@ -158,18 +165,18 @@ final class SqlService implements ISqlService {
     }
 
     @Override
-    public void updateByPrimaryKey(String pStrTableName, List<SqlParameter> pSQLParameterList) {
+    public void updateByPrimaryKey(String pStrTableName, List<SqlParameter<? extends Object>> pSQLParameterList) {
         mLogger.debug("Start updateByPrimaryKey");
 
         StringBuffer lStringBufferSQL = new StringBuffer("UPDATE ");
         lStringBufferSQL.append(pStrTableName);
         lStringBufferSQL.append(" SET ");
 
-        List<SqlParameter> lSQLParameterList = new ArrayList<SqlParameter>();
+        List<SqlParameter<? extends Object>> lSQLParameterList = new ArrayList<SqlParameter<? extends Object>>();
 
         // Columns
         int numberOfColumns = 0;
-        for (SqlParameter lSQLParameter : pSQLParameterList) {
+        for (SqlParameter<? extends Object> lSQLParameter : pSQLParameterList) {
             if (lSQLParameter.getColumn().getIsPartOfPk()) {
                 continue;
             }
@@ -184,7 +191,7 @@ final class SqlService implements ISqlService {
 
         // Where condition on primary key
         numberOfColumns = 0;
-        for (SqlParameter lSQLParameter : pSQLParameterList) {
+        for (SqlParameter<? extends Object> lSQLParameter : pSQLParameterList) {
             if (!lSQLParameter.getColumn().getIsPartOfPk()) {
                 continue;
             }

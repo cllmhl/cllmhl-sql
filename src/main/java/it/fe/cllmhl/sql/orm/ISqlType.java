@@ -1,4 +1,4 @@
-package it.fe.cllmhl.sql;
+package it.fe.cllmhl.sql.orm;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;

@@ -1,8 +1,9 @@
-package it.fe.cllmhl.sql;
+package it.fe.cllmhl.sql.orm;
 
 import it.fe.cllmhl.core.ILogger;
 import it.fe.cllmhl.core.ServiceLocator;
 import it.fe.cllmhl.core.UncheckedException;
+import it.fe.cllmhl.sql.SqlErrors;
 
 import java.math.BigDecimal;
 import java.sql.Date;

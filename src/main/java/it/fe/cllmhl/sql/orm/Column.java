@@ -10,20 +10,20 @@ public final class Column<T> {
 
 	//Proprieta di ogni colonna
 	private String name;
-	private ISqlType<T> sqlType;
+	private IJdbcMapper<T> jdbcMapper;
 	private boolean isPartOfPk;
 
 	//Costruttore usato dai DAO
-	public Column (String name, ISqlType<T> sqlType, boolean isPartOfPk){
+	public Column (String name, IJdbcMapper<T> jdbcMapper, boolean isPartOfPk){
 		this.name = name;
-		this.sqlType = sqlType;
+		this.jdbcMapper = jdbcMapper;
 		this.isPartOfPk = isPartOfPk;
 	}
 
 	//Costruttore usato per join con alias..
-	public Column (String name, ISqlType<T> sqlType){
+	public Column (String name, IJdbcMapper<T> jdbcMapper){
 		this.name = name;
-		this.sqlType = sqlType;
+		this.jdbcMapper = jdbcMapper;
 		this.isPartOfPk = false;
 	}
 
@@ -37,12 +37,12 @@ public final class Column<T> {
 
 	//Gestione del decode sul resultset
 	public T getValue(ResultSet pResultSet) {
-		return sqlType.getValue(pResultSet, name);
+		return jdbcMapper.getValue(pResultSet, name);
 	}
 
 	//Gestione del set parameter sul PreparedStatement
 	public void setParameter(PreparedStatement pPreparedStatement, int pIntPosition, T pValue) {
-		sqlType.setParameter(pPreparedStatement, pIntPosition, pValue);
+		jdbcMapper.setParameter(pPreparedStatement, pIntPosition, pValue);
 	}
 	
 	//Nome della variabile java
@@ -52,6 +52,6 @@ public final class Column<T> {
 
 	@Override
 	public String toString() {
-		return name + "(" + sqlType + ")";
+		return name + "(" + jdbcMapper + ")";
 	}
 }

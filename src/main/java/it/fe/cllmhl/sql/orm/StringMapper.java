@@ -9,23 +9,23 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-class StringSqlType implements ISqlType<String> {
+class StringMapper implements IJdbcMapper<String> {
 
-    private static ILogger mLogger = ServiceLocator.getLogService().getLogger(StringSqlType.class);
+    private static ILogger mLogger = ServiceLocator.getLogService().getLogger(StringMapper.class);
 
     @Override
     public String getValue(ResultSet pResultSet, String pStrColumnName) {
-        String lStrValue = null;
+        String lObjValue = null;
         try {
-            lStrValue = pResultSet.getString(pStrColumnName);
+            lObjValue = pResultSet.getString(pStrColumnName);
             if (pResultSet.wasNull()) {
-                lStrValue = null;
+                lObjValue = null;
             }
         } catch (SQLException e) {
-            mLogger.error(e, "Error while getting Integer value for column ", pStrColumnName);
+            mLogger.error(e, "Error while getting String value for column ", pStrColumnName);
             throw new UncheckedException(e, SqlErrors.SQL, e.getMessage());
         }
-        return lStrValue;
+        return lObjValue;
     }
 
     @Override
@@ -33,7 +33,7 @@ class StringSqlType implements ISqlType<String> {
         try {
             pPreparedStatement.setString(pIntPosition, pObjParameter);
         } catch (SQLException e) {
-            mLogger.error(e, "Error while setting Integer value ", pObjParameter, " at position ", pIntPosition);
+            mLogger.error(e, "Error while setting String value ", pObjParameter, " at position ", pIntPosition);
             throw new UncheckedException(e, SqlErrors.SQL, e.getMessage());
         }
     }

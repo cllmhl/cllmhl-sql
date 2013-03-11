@@ -9,23 +9,23 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-class IntegerSqlType implements ISqlType<Integer> {
+class IntegerMapper implements IJdbcMapper<Integer> {
 
-    private static ILogger mLogger = ServiceLocator.getLogService().getLogger(IntegerSqlType.class);
+    private static ILogger mLogger = ServiceLocator.getLogService().getLogger(IntegerMapper.class);
 
     @Override
     public Integer getValue(ResultSet pResultSet, String pStrColumnName) {
-        Integer lIntValue = null;
+        Integer lObjValue = null;
         try {
-            lIntValue = pResultSet.getInt(pStrColumnName);
+            lObjValue = pResultSet.getInt(pStrColumnName);
             if (pResultSet.wasNull()) {
-                lIntValue = null;
+                lObjValue = null;
             }
         } catch (SQLException e) {
             mLogger.error(e, "Error while getting Integer value for column ", pStrColumnName);
             throw new UncheckedException(e, SqlErrors.SQL, e.getMessage());
         }
-        return lIntValue;
+        return lObjValue;
     }
 
     @Override

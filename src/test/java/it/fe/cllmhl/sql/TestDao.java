@@ -2,12 +2,14 @@ package it.fe.cllmhl.sql;
 
 import it.fe.cllmhl.core.ILogger;
 import it.fe.cllmhl.core.ServiceLocator;
-import it.fe.cllmhl.sql.TestTable.TestRowDecoder;
+import it.fe.cllmhl.sql.Test.TestRowDecoder;
 import it.fe.cllmhl.sql.orm.PagedResultsetDecoder;
 import it.fe.cllmhl.sql.orm.SqlParameter;
 import it.fe.cllmhl.sql.orm.SqlStatement;
-import it.fe.cllmhl.sql.service.SqlService;
+import it.fe.cllmhl.sql.service.ISqlService;
 
+import java.math.BigDecimal;
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,64 +17,58 @@ import java.util.List;
  * Classe statica deputata alla persistenza della tabella test
  */
 final class TestDao {
-    /** IL DBManager di riferimento */
-    protected static final SqlService SQLSERVICE;
 
     private static ILogger mLogger = ServiceLocator.getLogService().getLogger(TestDao.class);
+    public static ISqlService SQLSERVICE = ServiceLocator.getServiceByName(ISqlService.class, "POOL");
 
-    private TestDao() {
-    }
+    protected static SqlStatement buildWhereConditionUsingTemplate(TestBean pTestBean) {
+        mLogger.debug("Start buildWhereConditionUsingTemplate");
 
-    static {
-        SQLSERVICE = SqlService.getInstance("TEST");
-    }
-
-    protected static TestBean insert(TestBean pTestBean) {
-        mLogger.debug("Start insert");
-
-        List<SqlParameter<? extends Object>> lSqlParameterList = new ArrayList<SqlParameter<? extends Object>>();
+        SqlStatement lSqlStatement = new SqlStatement(" WHERE 1=1 ");
 
         // chiave
-        if (pTestBean.getChiave() != null)
-            lSqlParameterList.add(new SqlParameter(TestTable.chiave, pTestBean.getChiave()));
+        if (pTestBean.getChiave() != null) {
+            lSqlStatement.append(" AND ");
+            lSqlStatement.append(Test.CHIAVE.getName());
+            lSqlStatement.append(" = ?", new SqlParameter<Integer>(Test.CHIAVE, pTestBean.getChiave()));
+        }
+
         // stringa
-        if (pTestBean.getStringa() != null)
-            lSqlParameterList.add(new SqlParameter(TestTable.stringa, pTestBean.getStringa()));
+        if (pTestBean.getStringa() != null) {
+            lSqlStatement.append(" AND ");
+            lSqlStatement.append(Test.STRINGA.getName());
+            lSqlStatement.append(" LIKE ?", new SqlParameter<String>(Test.STRINGA, "%" + pTestBean.getStringa() + "%"));
+        }
+
         // importo
-        if (pTestBean.getImporto() != null)
-            lSqlParameterList.add(new SqlParameter(TestTable.importo, pTestBean.getImporto()));
+        if (pTestBean.getImporto() != null) {
+            lSqlStatement.append(" AND ");
+            lSqlStatement.append(Test.IMPORTO.getName());
+            lSqlStatement.append(" = ?", new SqlParameter<BigDecimal>(Test.IMPORTO, pTestBean.getImporto()));
+        }
+
         // qty
-        if (pTestBean.getQty() != null)
-            lSqlParameterList.add(new SqlParameter(TestTable.qty, pTestBean.getQty()));
+        if (pTestBean.getQty() != null) {
+            lSqlStatement.append(" AND ");
+            lSqlStatement.append(Test.QTY.getName());
+            lSqlStatement.append(" = ?", new SqlParameter<Integer>(Test.QTY, pTestBean.getQty()));
+        }
+
         // data
-        if (pTestBean.getData() != null)
-            lSqlParameterList.add(new SqlParameter(TestTable.data, pTestBean.getData()));
+        if (pTestBean.getData() != null) {
+            lSqlStatement.append(" AND ");
+            lSqlStatement.append(Test.DATA.getName());
+            lSqlStatement.append(" >= ?", new SqlParameter<Date>(Test.DATA, pTestBean.getData()));
+        }
+        if (pTestBean.getDatato() != null) {
+            lSqlStatement.append(" AND ");
+            lSqlStatement.append(Test.DATA.getName());
+            lSqlStatement.append(" <= ?", new SqlParameter<Date>(Test.DATA, pTestBean.getDatato()));
+        }
 
-        SQLSERVICE.insert(TestTable.getName(), lSqlParameterList);
-        mLogger.debug("Finish insert");
-        return pTestBean;
-    }
+        mLogger.debug("Finish buildWhereConditionUsingTemplate returning ", lSqlStatement);
 
-    protected static void updateByPrimaryKey(TestBean pTestBean) {
-        mLogger.debug("Start updateByPrimaryKey");
-
-        List<SqlParameter<? extends Object>> lSqlParameterList = new ArrayList<SqlParameter<? extends Object>>();
-
-        // chiave
-        lSqlParameterList.add(new SqlParameter(TestTable.chiave, pTestBean.getChiave()));
-        // stringa
-        lSqlParameterList.add(new SqlParameter(TestTable.stringa, pTestBean.getStringa()));
-        // importo
-        lSqlParameterList.add(new SqlParameter(TestTable.importo, pTestBean.getImporto()));
-        // qty
-        lSqlParameterList.add(new SqlParameter(TestTable.qty, pTestBean.getQty()));
-        // data
-        lSqlParameterList.add(new SqlParameter(TestTable.data, pTestBean.getData()));
-
-        // Eseguiamo!!
-        SQLSERVICE.updateByPrimaryKey(TestTable.getName(), lSqlParameterList);
-
-        mLogger.debug("finish updateByPrimaryKey");
+        return lSqlStatement;
     }
 
     protected static void deleteByPrimaryKey(TestBean pTestBean) {
@@ -81,14 +77,61 @@ final class TestDao {
         List<SqlParameter<? extends Object>> lSqlParameterList = new ArrayList<SqlParameter<? extends Object>>();
 
         // chiave
-        lSqlParameterList.add(new SqlParameter(TestTable.chiave, pTestBean.getChiave()));
+        lSqlParameterList.add(new SqlParameter<Integer>(Test.CHIAVE, pTestBean.getChiave()));
 
         // Eseguiamo
-        SQLSERVICE.deleteByPrimaryKey(TestTable.getName(), lSqlParameterList);
+        SQLSERVICE.deleteByPrimaryKey(Test.NAME, lSqlParameterList);
+    }
+
+    protected static TestBean insert(TestBean pTestBean) {
+        mLogger.debug("Start insert");
+
+        List<SqlParameter<? extends Object>> lSqlParameterList = new ArrayList<SqlParameter<? extends Object>>();
+
+        // chiave
+        if (pTestBean.getChiave() != null) {
+            lSqlParameterList.add(new SqlParameter<Integer>(Test.CHIAVE, pTestBean.getChiave()));
+        }
+        // stringa
+        if (pTestBean.getStringa() != null) {
+            lSqlParameterList.add(new SqlParameter<String>(Test.STRINGA, pTestBean.getStringa()));
+        }
+        // importo
+        if (pTestBean.getImporto() != null) {
+            lSqlParameterList.add(new SqlParameter<BigDecimal>(Test.IMPORTO, pTestBean.getImporto()));
+        }
+        // qty
+        if (pTestBean.getQty() != null) {
+            lSqlParameterList.add(new SqlParameter<Integer>(Test.QTY, pTestBean.getQty()));
+        }
+        // data
+        if (pTestBean.getData() != null) {
+            lSqlParameterList.add(new SqlParameter<Date>(Test.DATA, pTestBean.getData()));
+        }
+
+        SQLSERVICE.insert(Test.NAME, lSqlParameterList);
+        mLogger.debug("Finish insert");
+        return pTestBean;
     }
 
     protected static List<TestBean> loadAll() {
         return loadUsingTemplate(new TestBean(), null);
+    }
+
+    protected static TestBean loadByPrimaryKey(TestBean pTestBean) {
+        mLogger.debug("Start loadByPrimaryKey");
+
+        List<SqlParameter<? extends Object>> lSqlParameterList = new ArrayList<SqlParameter<? extends Object>>();
+
+        // chiave
+        lSqlParameterList.add(new SqlParameter<Integer>(Test.CHIAVE, pTestBean.getChiave()));
+
+        // Eseguiamo!!
+        Object lObject = SQLSERVICE.loadByPrimaryKey(Test.NAME, lSqlParameterList, new TestRowDecoder());
+
+        mLogger.debug("finish loadByPrimaryKey");
+        // Cast
+        return (TestBean) lObject;
     }
 
     protected static List<TestBean> loadUsingTemplate(TestBean pTestBean, IPager pPager) {
@@ -96,7 +139,7 @@ final class TestDao {
 
         SqlStatement lSqlStatement = new SqlStatement("SELECT * FROM ");
         lSqlStatement.append("");
-        lSqlStatement.append(TestTable.getName());
+        lSqlStatement.append(Test.NAME);
         lSqlStatement.append(" ");
 
         // Preparo ed aggiungo la condizione di where
@@ -115,69 +158,28 @@ final class TestDao {
         return lTestBeanList;
     }
 
-    protected static TestBean loadByPrimaryKey(TestBean pTestBean) {
-        mLogger.debug("Start loadByPrimaryKey");
+    protected static void updateByPrimaryKey(TestBean pTestBean) {
+        mLogger.debug("Start updateByPrimaryKey");
 
         List<SqlParameter<? extends Object>> lSqlParameterList = new ArrayList<SqlParameter<? extends Object>>();
 
         // chiave
-        lSqlParameterList.add(new SqlParameter(TestTable.chiave, pTestBean.getChiave()));
+        lSqlParameterList.add(new SqlParameter<Integer>(Test.CHIAVE, pTestBean.getChiave()));
+        // stringa
+        lSqlParameterList.add(new SqlParameter<String>(Test.STRINGA, pTestBean.getStringa()));
+        // importo
+        lSqlParameterList.add(new SqlParameter<BigDecimal>(Test.IMPORTO, pTestBean.getImporto()));
+        // qty
+        lSqlParameterList.add(new SqlParameter<Integer>(Test.QTY, pTestBean.getQty()));
+        // data
+        lSqlParameterList.add(new SqlParameter<Date>(Test.DATA, pTestBean.getData()));
 
         // Eseguiamo!!
-        Object lObject = SQLSERVICE.loadByPrimaryKey(TestTable.getName(), lSqlParameterList, new TestRowDecoder());
+        SQLSERVICE.updateByPrimaryKey(Test.NAME, lSqlParameterList);
 
-        mLogger.debug("finish loadByPrimaryKey");
-        // Cast
-        return (TestBean) lObject;
+        mLogger.debug("finish updateByPrimaryKey");
     }
 
-    protected static SqlStatement buildWhereConditionUsingTemplate(TestBean pTestBean) {
-        mLogger.debug("Start buildWhereConditionUsingTemplate");
-
-        SqlStatement lSqlStatement = new SqlStatement(" WHERE 1=1 ");
-
-        // chiave
-        if (pTestBean.getChiave() != null) {
-            lSqlStatement.append(" AND ");
-            lSqlStatement.append(TestTable.chiave.getName());
-            lSqlStatement.append(" = ?", new SqlParameter(TestTable.chiave, pTestBean.getChiave()));
-        }
-
-        // stringa
-        if (pTestBean.getStringa() != null) {
-            lSqlStatement.append(" AND ");
-            lSqlStatement.append(TestTable.stringa.getName());
-            lSqlStatement.append(" LIKE ?", new SqlParameter(TestTable.stringa, "%" + pTestBean.getStringa() + "%"));
-        }
-
-        // importo
-        if (pTestBean.getImporto() != null) {
-            lSqlStatement.append(" AND ");
-            lSqlStatement.append(TestTable.importo.getName());
-            lSqlStatement.append(" = ?", new SqlParameter(TestTable.importo, pTestBean.getImporto()));
-        }
-
-        // qty
-        if (pTestBean.getQty() != null) {
-            lSqlStatement.append(" AND ");
-            lSqlStatement.append(TestTable.qty.getName());
-            lSqlStatement.append(" = ?", new SqlParameter(TestTable.qty, pTestBean.getQty()));
-        }
-
-        // data
-        if (pTestBean.getData() != null) {
-            lSqlStatement.append(" AND ");
-            lSqlStatement.append(TestTable.data.getName());
-            lSqlStatement.append(" >= ?", new SqlParameter(TestTable.data, pTestBean.getData()));
-        }
-        if (pTestBean.getDatato() != null) {
-            lSqlStatement.append(" AND ");
-            lSqlStatement.append(TestTable.data.getName());
-            lSqlStatement.append(" <= ?", new SqlParameter(TestTable.data, pTestBean.getDatato()));
-        }
-
-        mLogger.debug("Finish buildWhereConditionUsingTemplate returning ", lSqlStatement);
-
-        return lSqlStatement;
+    private TestDao() {
     }
 }

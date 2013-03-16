@@ -10,7 +10,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-class BigDecimalMapper implements IJdbcMapper<BigDecimal> {
+class BigDecimalMapper implements ISqlMapper<BigDecimal> {
 
     private static ILogger mLogger = ServiceLocator.getLogService().getLogger(BigDecimalMapper.class);
 

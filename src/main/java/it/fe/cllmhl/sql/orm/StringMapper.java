@@ -9,7 +9,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-class StringMapper implements IJdbcMapper<String> {
+class StringMapper implements ISqlMapper<String> {
 
     private static ILogger mLogger = ServiceLocator.getLogService().getLogger(StringMapper.class);
 

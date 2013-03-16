@@ -10,18 +10,18 @@ public final class Column<T> {
 
 	//Proprieta di ogni colonna
 	private String name;
-	private IJdbcMapper<T> jdbcMapper;
+	private ISqlMapper<T> jdbcMapper;
 	private boolean isPartOfPk;
 
 	//Costruttore usato dai DAO
-	public Column (String name, IJdbcMapper<T> jdbcMapper, boolean isPartOfPk){
+	public Column (String name, ISqlMapper<T> jdbcMapper, boolean isPartOfPk){
 		this.name = name;
 		this.jdbcMapper = jdbcMapper;
 		this.isPartOfPk = isPartOfPk;
 	}
 
 	//Costruttore usato per join con alias..
-	public Column (String name, IJdbcMapper<T> jdbcMapper){
+	public Column (String name, ISqlMapper<T> jdbcMapper){
 		this.name = name;
 		this.jdbcMapper = jdbcMapper;
 		this.isPartOfPk = false;

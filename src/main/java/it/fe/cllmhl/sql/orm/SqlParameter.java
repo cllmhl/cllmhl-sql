@@ -1,6 +1,5 @@
 package it.fe.cllmhl.sql.orm;
 
-
 import java.sql.PreparedStatement;
 
 public class SqlParameter<T> {
@@ -12,8 +11,12 @@ public class SqlParameter<T> {
         this.value = value;
     }
 
-    public final Column<T> getColumn() {
-        return column;
+    public boolean getIsPartOfPk() {
+        return column.getIsPartOfPk();
+    }
+
+    public String getName() {
+        return column.getName();
     }
 
     public final T getValue() {
@@ -23,4 +26,5 @@ public class SqlParameter<T> {
     public void setParameter(PreparedStatement pPreparedStatement, int pIntPosition) {
         column.setParameter(pPreparedStatement, pIntPosition, value);
     }
+
 }

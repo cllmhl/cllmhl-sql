@@ -10,7 +10,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 
-class TimestampMapper implements IJdbcMapper<Timestamp> {
+class TimestampMapper implements ISqlMapper<Timestamp> {
 
     private static ILogger mLogger = ServiceLocator.getLogService().getLogger(TimestampMapper.class);
 

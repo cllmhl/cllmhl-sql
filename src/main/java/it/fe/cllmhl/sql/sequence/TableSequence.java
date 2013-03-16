@@ -2,7 +2,7 @@ package it.fe.cllmhl.sql.sequence;
 
 import it.fe.cllmhl.sql.orm.Column;
 import it.fe.cllmhl.sql.orm.IRowDecoder;
-import it.fe.cllmhl.sql.orm.JdbcMapping;
+import it.fe.cllmhl.sql.orm.SqlMapping;
 import it.fe.cllmhl.sql.orm.ReflectionRowDecoder;
 
 import java.sql.ResultSet;
@@ -35,8 +35,8 @@ interface TableSequence {
     }
 
     String NAME = "table_sequence";
-    Column<String> ID_TABLE = new Column<String>("id_table", JdbcMapping.STRING, true);
+    Column<String> ID_TABLE = new Column<String>("id_table", SqlMapping.STRING, true);
 
-    Column<Integer> KEY_VALUE = new Column<Integer>("key_value", JdbcMapping.INTEGER, false);
+    Column<Integer> KEY_VALUE = new Column<Integer>("key_value", SqlMapping.INTEGER, false);
 
 }

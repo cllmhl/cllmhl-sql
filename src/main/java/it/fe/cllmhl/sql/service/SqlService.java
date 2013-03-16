@@ -77,7 +77,7 @@ final class SqlService implements ISqlService {
             } else {
                 lStringBufferSQL.append(" AND ");
             }
-            lStringBufferSQL.append(lSQLParameter.getColumn().getName());
+            lStringBufferSQL.append(lSQLParameter.getName());
             lStringBufferSQL.append("=?");
         }
 
@@ -110,7 +110,7 @@ final class SqlService implements ISqlService {
             if (numberOfColumns != 1) {
                 lStringBufferSQL.append(",");
             }
-            lStringBufferSQL.append(lSQLParameter.getColumn().getName());
+            lStringBufferSQL.append(lSQLParameter.getName());
         }
         lStringBufferSQL.append(")");
 
@@ -145,7 +145,7 @@ final class SqlService implements ISqlService {
             } else {
                 lStringBufferSQL.append(" AND ");
             }
-            lStringBufferSQL.append(lSQLParameter.getColumn().getName());
+            lStringBufferSQL.append(lSQLParameter.getName());
             lStringBufferSQL.append("=?");
         }
 
@@ -177,14 +177,14 @@ final class SqlService implements ISqlService {
         // Columns
         int numberOfColumns = 0;
         for (SqlParameter<? extends Object> lSQLParameter : pSQLParameterList) {
-            if (lSQLParameter.getColumn().getIsPartOfPk()) {
+            if (lSQLParameter.getIsPartOfPk()) {
                 continue;
             }
             numberOfColumns++;
             if (numberOfColumns != 1) {
                 lStringBufferSQL.append(",");
             }
-            lStringBufferSQL.append(lSQLParameter.getColumn().getName());
+            lStringBufferSQL.append(lSQLParameter.getName());
             lStringBufferSQL.append("=?");
             lSQLParameterList.add(lSQLParameter);
         }
@@ -192,7 +192,7 @@ final class SqlService implements ISqlService {
         // Where condition on primary key
         numberOfColumns = 0;
         for (SqlParameter<? extends Object> lSQLParameter : pSQLParameterList) {
-            if (!lSQLParameter.getColumn().getIsPartOfPk()) {
+            if (!lSQLParameter.getIsPartOfPk()) {
                 continue;
             }
             numberOfColumns++;
@@ -201,7 +201,7 @@ final class SqlService implements ISqlService {
             } else {
                 lStringBufferSQL.append(" AND ");
             }
-            lStringBufferSQL.append(lSQLParameter.getColumn().getName());
+            lStringBufferSQL.append(lSQLParameter.getName());
             lStringBufferSQL.append("=?");
             lSQLParameterList.add(lSQLParameter);
         }

@@ -2,7 +2,7 @@ package it.fe.cllmhl.sql;
 
 import it.fe.cllmhl.sql.orm.Column;
 import it.fe.cllmhl.sql.orm.IRowDecoder;
-import it.fe.cllmhl.sql.orm.JdbcMapping;
+import it.fe.cllmhl.sql.orm.SqlMapping;
 
 import java.math.BigDecimal;
 import java.sql.Date;
@@ -14,11 +14,11 @@ import java.util.List;
 interface Test {
 	String NAME = "test";
     
-    Column<Integer> CHIAVE = new Column<Integer>("chiave",JdbcMapping.INTEGER,true);
-    Column<String> STRINGA = new Column<String>("stringa",JdbcMapping.STRING,false);
-    Column<BigDecimal> IMPORTO = new Column<BigDecimal>("importo",JdbcMapping.BIGDECIMAL,false);
-    Column<Integer> QTY = new Column<Integer>("qty",JdbcMapping.INTEGER,false);
-    Column<Date> DATA = new Column<Date>("data",JdbcMapping.DATE,false); 
+    Column<Integer> CHIAVE = new Column<Integer>("chiave",SqlMapping.INTEGER,true);
+    Column<String> STRINGA = new Column<String>("stringa",SqlMapping.STRING,false);
+    Column<BigDecimal> IMPORTO = new Column<BigDecimal>("importo",SqlMapping.BIGDECIMAL,false);
+    Column<Integer> QTY = new Column<Integer>("qty",SqlMapping.INTEGER,false);
+    Column<Date> DATA = new Column<Date>("data",SqlMapping.DATE,false); 
 
     
     final class TestRowDecoder implements IRowDecoder<TestBean> {

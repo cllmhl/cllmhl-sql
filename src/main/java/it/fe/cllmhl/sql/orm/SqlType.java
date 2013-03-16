@@ -16,7 +16,7 @@ import java.sql.Types;
 import java.util.HashMap;
 import java.util.Map;
 
-enum SqlType implements IJdbcMapper<Object> {
+enum SqlType implements ISqlMapper<Object> {
     INTEGER(Types.INTEGER, Integer.class) {
         @Override
         protected Integer getJdbcValue(ResultSet pResultSet, String pStrColumnName) throws SQLException {

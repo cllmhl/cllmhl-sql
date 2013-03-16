@@ -10,7 +10,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-class DateMapper implements IJdbcMapper<Date> {
+class DateMapper implements ISqlMapper<Date> {
 
     private static ILogger mLogger = ServiceLocator.getLogService().getLogger(DateMapper.class);
 

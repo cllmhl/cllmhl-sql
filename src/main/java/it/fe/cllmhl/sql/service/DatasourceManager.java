@@ -12,6 +12,7 @@ import java.io.File;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -25,7 +26,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
-final class DatasourceManager {
+public final class DatasourceManager {
 
     private static ILogger mLogger = ServiceLocator.getLogService().getLogger(DatasourceManager.class);
 
@@ -49,7 +50,7 @@ final class DatasourceManager {
 
             // jndiName <jndiName>java:comp/env/jdbc/et</jndiName>
             lDatasourceBean.setJndiName(extractValueFromElement(lElement, "jndiName"));
-            
+
             // driverClassName <driverClassName>com.mysql.jdbc.Driver</driverClassName>
             lDatasourceBean.setDriverClassName(extractValueFromElement(lElement, "driverClassName"));
 
@@ -78,15 +79,6 @@ final class DatasourceManager {
         return lDatasourceBean;
     }
 
-    private static String extractValueFromElement(Element lElement, String pStrName) {
-        String lStrValue = XMLUtil.extractValueByXpath(lElement, pStrName);
-        mLogger.debug(pStrName , ":", lStrValue);
-        if (StringUtil.isNotBlank(lStrValue)) {
-            return lStrValue;
-        }
-        return null;
-    }
-
     private static DataSource buildPooledDatasource(DatasourceBean pDatasourceBean) {
         mLogger.info("Start buildPooledDatasource ", pDatasourceBean);
         PoolProperties lPoolProperties = new PoolProperties();
@@ -101,6 +93,19 @@ final class DatasourceManager {
         DataSource lDatasource = new org.apache.tomcat.jdbc.pool.DataSource(lPoolProperties);
         mLogger.info("Finish buildPooledDatasource ", pDatasourceBean);
         return lDatasource;
+    }
+
+    private static String extractValueFromElement(Element lElement, String pStrName) {
+        String lStrValue = XMLUtil.extractValueByXpath(lElement, pStrName);
+        mLogger.debug(pStrName, ":", lStrValue);
+        if (StringUtil.isNotBlank(lStrValue)) {
+            return lStrValue;
+        }
+        return null;
+    }
+
+    public static Collection<String> getAvailableDatasources() {
+        return mDatasources.keySet();
     }
 
     public static Connection getConnection(String pStrConnectionId) {
@@ -154,5 +159,6 @@ final class DatasourceManager {
         return lDatasourceList;
     }
 
-    private DatasourceManager(){}
+    private DatasourceManager() {
+    }
 }

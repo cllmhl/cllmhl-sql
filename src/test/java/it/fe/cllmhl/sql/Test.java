@@ -12,15 +12,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 interface Test {
+    //Table
 	String NAME = "test";
     
+	//Colums
     Column<Integer> CHIAVE = new Column<Integer>("chiave",SqlMapping.INTEGER,true);
     Column<String> STRINGA = new Column<String>("stringa",SqlMapping.STRING,false);
     Column<BigDecimal> IMPORTO = new Column<BigDecimal>("importo",SqlMapping.BIGDECIMAL,false);
     Column<Integer> QTY = new Column<Integer>("qty",SqlMapping.INTEGER,false);
     Column<Date> DATA = new Column<Date>("data",SqlMapping.DATE,false); 
 
-    
+    //Rowdecoder
     final class TestRowDecoder implements IRowDecoder<TestBean> {
         private static List<Column<? extends Object>> columns = new ArrayList<Column<? extends Object>>();
 
